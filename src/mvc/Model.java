@@ -5,12 +5,14 @@
  */
 package mvc;
 
-/**
- *
- * @author So
- */
 public interface Model {
-    int gibZahl();
+    void aufgabeHinzufügen(aufgabe a);
+    aufgabe[] aufgabenZurückgeben();
+    boolean aufgabenStatusÄndern(UUID id);
+
+    fach[] fächerZurückgeben();
+    void fachHinzufügen(fach f);
+
     void registrieren(Beobachter b);
     void abmelden(Beobachter b);
 }
