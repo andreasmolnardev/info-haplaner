@@ -10,6 +10,11 @@ package mvc;
  * @author So
  */
 public interface Controller {
+    void fachHinzufügen(String name, String kürzel);
+    
+    void aufgabeHinzufügen(aufgabe a);
+    void aufgabenStatusÄndern(UUID id);
+
     void plusButtonGedrueckt();
     void umschaltButtonGedrueckt();
 }
