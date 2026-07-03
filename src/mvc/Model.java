@@ -5,13 +5,17 @@
  */
 package mvc;
 
+import java.util.UUID;
+import mvc.shared.Aufgabe;
+import mvc.shared.Fach;
+
 public interface Model {
-    void aufgabeHinzufügen(aufgabe a);
-    aufgabe[] aufgabenZurückgeben();
+    void aufgabeHinzufügen(Aufgabe a);
+    Aufgabe[] aufgabenZurückgeben();
     boolean aufgabenStatusÄndern(UUID id);
 
-    fach[] fächerZurückgeben();
-    void fachHinzufügen(fach f);
+    Fach[] fächerZurückgeben();
+    void fachHinzufügen(Fach f);
 
     void registrieren(Beobachter b);
     void abmelden(Beobachter b);

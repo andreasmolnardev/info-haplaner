@@ -5,6 +5,9 @@
  */
 package mvc;
 import java.util.LinkedList;
+import java.util.UUID;
+import mvc.shared.Aufgabe;
+import mvc.shared.Fach;
 /**
  *
  * @author So
@@ -15,10 +18,14 @@ public class Wert implements Model{
     private static Wert w = new Wert();
     private int zahl;
     private LinkedList<Beobachter> beobachter;
+    private LinkedList<Aufgabe> aufgaben;
+    private LinkedList<Fach> fächer;
     // Konstruktor
     private Wert(){
         zahl = 0;
         beobachter = new LinkedList<Beobachter>();
+        aufgaben = new LinkedList<Aufgabe>();
+        fächer = new LinkedList<Fach>();
     }
     // Ausgabe für Singleton
     static Wert geben(){
@@ -26,6 +33,26 @@ public class Wert implements Model{
     }
     // Methoden aus Model
     public int gibZahl(){ return zahl; }
+
+    public void aufgabeHinzufügen(Aufgabe a){
+        aufgaben.add(a);
+    }
+
+    public Aufgabe[] aufgabenZurückgeben(){
+        return aufgaben.toArray(new Aufgabe[aufgaben.size()]);
+    }
+
+    public boolean aufgabenStatusÄndern(UUID id){
+        return false;
+    }
+
+    public Fach[] fächerZurückgeben(){
+        return fächer.toArray(new Fach[fächer.size()]);
+    }
+
+    public void fachHinzufügen(Fach f){
+        fächer.add(f);
+    }
     
     public void registrieren(Beobachter b){
         beobachter.add(b); }

@@ -5,14 +5,13 @@
  */
 package mvc;
 
-/**
- *
- * @author So
- */
+import java.util.UUID;
+import mvc.shared.Aufgabe;
+
 public interface Controller {
     void fachHinzufügen(String name, String kürzel);
     
-    void aufgabeHinzufügen(aufgabe a);
+    void aufgabeHinzufügen(Aufgabe a);
     void aufgabenStatusÄndern(UUID id);
 
     void plusButtonGedrueckt();

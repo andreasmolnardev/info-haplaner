@@ -1,8 +1,11 @@
+package mvc.shared;
+
+import java.util.Date;
 import java.util.UUID;
 
-public class aufgabe{
+public class Aufgabe{
     UUID id;
-    fach fach;
+    Fach fach;
     Date erstelldatum;
     Date ablaufdatum;
     String titel;

@@ -5,6 +5,9 @@
  */
 package mvc;
 
+import java.util.UUID;
+import mvc.shared.Aufgabe;
+
 /**
  *
  * @author So
@@ -21,6 +24,17 @@ public class ZaehlerController implements Controller{
         
     }
     //Methoden aus Interface
+    public void fachHinzufügen(String name, String kürzel){
+    }
+
+    public void aufgabeHinzufügen(Aufgabe a){
+        Wert.geben().aufgabeHinzufügen(a);
+    }
+
+    public void aufgabenStatusÄndern(UUID id){
+        Wert.geben().aufgabenStatusÄndern(id);
+    }
+
     public void plusButtonGedrueckt(){
         Wert.geben().zahlErhoehen();
     }
