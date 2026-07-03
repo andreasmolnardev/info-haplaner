@@ -4,12 +4,11 @@
  * and open the template in the editor.
  */
 package mvc;
+import mvc.shared.*;
 
-/**
- *
- * @author So
- */
 public interface Beobachter {
-   void zahlGeaendert();
-   void setzeEnabled(boolean en);
+   void aufgabeAnzeigen(Aufgabe a);
+   void fachAnzeigen(Fach f);
+
+   void aufgabenStatusGeaendert(Fach f);
 }

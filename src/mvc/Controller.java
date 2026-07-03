@@ -6,14 +6,13 @@
 package mvc;
 
 import java.util.UUID;
-import mvc.shared.Aufgabe;
+
+import java.util.Date;
 
 public interface Controller {
     void fachHinzufügen(String name, String kürzel);
-    
-    void aufgabeHinzufügen(Aufgabe a);
-    void aufgabenStatusÄndern(UUID id);
+    void aufgabeHinzufügen(UUID fach, String titel, Date ablaufdatum);
 
     void plusButtonGedrueckt();
-    void umschaltButtonGedrueckt();
+    void statusÄndernButtonGedrueckt(UUID aufgabe);
 }

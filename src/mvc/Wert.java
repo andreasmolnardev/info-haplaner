@@ -60,10 +60,4 @@ public class Wert implements Model{
     public void abmelden(Beobachter b){
         beobachter.remove(b);  }
     
-    // Methode für Beobachter
-    public void zahlErhoehen(){
-        zahl++;
-        for(Beobachter b :beobachter){
-            b.zahlGeaendert(); }
-    }
 }
