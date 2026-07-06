@@ -1,9 +1,22 @@
 public class LogikController implements Controller {
-    private final Logik logik;
 
-    public LogikController(Logik logik) {
-        this.logik = logik;
+    public LogikController() {
+    }   
+    
+    public void fachHinzufügen(String name, String kürzel) {
+
     }
+    public void aufgabeHinzufügen(UUID fach, String titel, Date ablaufdatum) {
+
+    }
+
+    public void plusButtonGedrueckt() {
+
+    }
+    public void statusÄndernButtonGedrueckt(UUID aufgabe) {
+
+    }
+
 
    
 }
