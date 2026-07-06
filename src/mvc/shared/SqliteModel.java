@@ -26,7 +26,9 @@ public class SqliteModel implements Model {
     @Override
     public void aufgabeHinzufügen(Aufgabe a) {
         aufgabeDAO.insert(a);
-        benachrichtigen();
+        for (Beobachter b : beobachter) {
+            b.aufgabeAnzeigen(a);
+        }
     }
 
     @Override
@@ -39,7 +41,10 @@ public class SqliteModel implements Model {
     public boolean aufgabenStatusÄndern(UUID id) {
         boolean geändert = aufgabeDAO.toggleStatus(id);
         if (geändert) {
-            benachrichtigen();
+            Aufgabe a = aufgabeDAO.findById(id);
+            for (Beobachter b : beobachter) {
+                b.aufgabenStatusGeaendert(a.fach);
+            }
         }
         return geändert;
     }
@@ -53,7 +58,9 @@ public class SqliteModel implements Model {
     @Override
     public void fachHinzufügen(Fach f) {
         fachDAO.insert(f);
-        benachrichtigen();
+        for (Beobachter b : beobachter) {
+            b.fachAnzeigen(f);
+        }
     }
 
     @Override
@@ -64,11 +71,5 @@ public class SqliteModel implements Model {
     @Override
     public void abmelden(Beobachter b) {
         beobachter.remove(b);
-    }
-
-    private void benachrichtigen() {
-        for (Beobachter b : beobachter) {
-            b.zahlGeaendert();
-        }
     }
 }
