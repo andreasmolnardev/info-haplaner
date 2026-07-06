@@ -12,7 +12,5 @@ import java.util.Date;
 public interface Controller {
     void fachHinzufügen(String name, String kürzel);
     void aufgabeHinzufügen(UUID fach, String titel, Date ablaufdatum);
-
-    void plusButtonGedrueckt();
     void statusÄndernButtonGedrueckt(UUID aufgabe);
 }

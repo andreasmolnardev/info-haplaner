@@ -5,8 +5,10 @@
  */
 package mvc;
 
+import java.util.Date;
 import java.util.UUID;
 import mvc.shared.Aufgabe;
+import mvc.shared.Fach;
 
 /**
  *
@@ -15,31 +17,39 @@ import mvc.shared.Aufgabe;
 public class ZaehlerController implements Controller{
     // Attribute
     private View view;
-    private boolean enabled;
     // Konstruktor
     public ZaehlerController(){
-        enabled = true;
+        Wert.geben().fachHinzufügen(new Fach("Englisch", "English"));
+        Wert.geben().aufgabeHinzufügen(new Aufgabe(Wert.geben().fächerZurückgeben()[0], "Arbeitsblatt bearbeiten", new Date()));
         view = new View(this);
         view.setVisible(true);
         
     }
     //Methoden aus Interface
     public void fachHinzufügen(String name, String kürzel){
+        if (kürzel != null && kürzel.trim().length() > 0) {
+            String fachName = name == null || name.trim().length() == 0 ? kürzel.trim() : name.trim();
+            Wert.geben().fachHinzufügen(new Fach(fachName, kürzel.trim()));
+        }
     }
 
-    public void aufgabeHinzufügen(Aufgabe a){
-        Wert.geben().aufgabeHinzufügen(a);
+    public void aufgabeHinzufügen(UUID fach, String titel, Date ablaufdatum){
+        if (titel == null || titel.trim().length() == 0) {
+            return;
+        }
+        Fach gefundenesFach = null;
+        for (Fach f : Wert.geben().fächerZurückgeben()) {
+            if (f.gibId().equals(fach)) {
+                gefundenesFach = f;
+                break;
+            }
+        }
+        if (gefundenesFach != null) {
+            Wert.geben().aufgabeHinzufügen(new Aufgabe(gefundenesFach, titel.trim(), ablaufdatum));
+        }
     }
 
-    public void aufgabenStatusÄndern(UUID id){
+    public void statusÄndernButtonGedrueckt(UUID id){
         Wert.geben().aufgabenStatusÄndern(id);
-    }
-
-    public void plusButtonGedrueckt(){
-        Wert.geben().zahlErhoehen();
-    }
-    public void umschaltButtonGedrueckt(){
-        enabled = !enabled;
-        view.setzeEnabled(enabled);
     }
 }

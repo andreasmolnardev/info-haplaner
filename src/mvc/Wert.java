@@ -36,6 +36,7 @@ public class Wert implements Model{
 
     public void aufgabeHinzufügen(Aufgabe a){
         aufgaben.add(a);
+        benachrichtigen();
     }
 
     public Aufgabe[] aufgabenZurückgeben(){
@@ -43,6 +44,13 @@ public class Wert implements Model{
     }
 
     public boolean aufgabenStatusÄndern(UUID id){
+        for (Aufgabe aufgabe : aufgaben) {
+            if (aufgabe.gibId().equals(id)) {
+                aufgabe.statusUmschalten();
+                benachrichtigen();
+                return true;
+            }
+        }
         return false;
     }
 
@@ -52,6 +60,7 @@ public class Wert implements Model{
 
     public void fachHinzufügen(Fach f){
         fächer.add(f);
+        benachrichtigen();
     }
     
     public void registrieren(Beobachter b){
@@ -59,5 +68,11 @@ public class Wert implements Model{
     
     public void abmelden(Beobachter b){
         beobachter.remove(b);  }
+
+    private void benachrichtigen() {
+        for (Beobachter b : beobachter) {
+            b.datenGeaendert();
+        }
+    }
     
 }

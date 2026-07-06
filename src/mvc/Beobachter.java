@@ -7,8 +7,5 @@ package mvc;
 import mvc.shared.*;
 
 public interface Beobachter {
-   void aufgabeAnzeigen(Aufgabe a);
-   void fachAnzeigen(Fach f);
-
-   void aufgabenStatusGeaendert(Fach f);
+   void datenGeaendert();
 }
