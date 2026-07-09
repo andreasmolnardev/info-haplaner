@@ -15,8 +15,8 @@ public class LogikController implements Controller {
 
     private final Model model;
 
-    public LogikController() {
-        this.model = new SqliteModel();
+    public LogikController(Model model) {
+        this.model = model; 
     }
 
     @Override
