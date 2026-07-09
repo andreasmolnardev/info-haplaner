@@ -16,7 +16,7 @@ public class LogikController implements Controller {
     private final Model model;
 
     public LogikController(Model model) {
-        this.model = model; 
+        this.model = model;
     }
 
     @Override
