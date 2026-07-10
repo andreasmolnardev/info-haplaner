@@ -1,4 +1,4 @@
-package mvc.shared;
+package mvc.db;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import mvc.shared.Fach;
 
 /**
  * Die Klasse übernimmt Zugriff auf Tabelle Fächer.

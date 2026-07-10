@@ -1,4 +1,4 @@
-package mvc.shared;
+package mvc.db;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

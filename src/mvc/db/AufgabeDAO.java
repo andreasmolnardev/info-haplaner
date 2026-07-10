@@ -1,4 +1,4 @@
-package mvc.shared;
+package mvc.db;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -8,12 +8,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import mvc.shared.Aufgabe;
+import mvc.shared.Fach;
 
 /**
- * CRUD-Zugriff auf die Tabelle Hausaufgaben. Liegt im Package mvc.shared,
- * um direkt auf die paketweiten Felder von {@link Aufgabe} zugreifen zu
- * können. Löst die Fremdschlüsselbeziehung fach_id -> Faecher.id über
- * {@link FachDAO} zu einem echten Fach-Objekt auf.
+ * CRUD-Zugriff auf die Tabelle Hausaufgaben. Löst die Fremdschlüsselbeziehung
+ * fach_id -> Faecher.id über {@link FachDAO} zu einem echten Fach-Objekt auf.
  */
 public class AufgabeDAO {
 
