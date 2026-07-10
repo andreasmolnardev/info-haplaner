@@ -1,4 +1,4 @@
-package mvc.shared;
+package mvc.db;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -7,8 +7,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import mvc.shared.Fach;
 
 /**
+ * Die Klasse übernimmt Zugriff auf Tabelle Fächer.
  * CRUD-Zugriff auf die Tabelle Faecher. Liegt im Package mvc.shared, um
  * direkt auf die paketweiten Felder von {@link Fach} zugreifen zu können,
  * ohne Fach.java um Getter/Setter erweitern zu müssen.
@@ -17,11 +19,19 @@ public class FachDAO {
 
     private final Connection connection;
 
+    /**
+     * Erstellt Verbindung zu Datenbank, die von allen Methoden verwendet wird.
+     */
     public FachDAO() {
         this.connection = DatabaseConnection.geben().getConnection();
     }
 
-    /** Create */
+    /**
+     * Fügt ein neues Fach in die Datenbank ein. Falls keine ID vorhanden ist,
+     * wird automatisch eine UUID verwendet.
+     * 
+     * @param f Das zu einfügende Fach-Objekt
+     */
     public void insert(Fach f) {
         if (f.id == null) {
             f.id = UUID.randomUUID();
@@ -37,7 +47,12 @@ public class FachDAO {
         }
     }
 
-    /** Read (einzeln) */
+    /**
+     * Sucht ein Fach anhand seiner ID und gibt das entsprechende Fach-Objekt oder null zurück.
+     * 
+     * @param id Die UUID des gesuchten Fachs
+     * @return Das gefundene Fach-Objekt oder null, falls nicht vorhanden
+     */
     public Fach findById(UUID id) {
         String sql = "SELECT id, kuerzel, name FROM Faecher WHERE id = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -53,7 +68,11 @@ public class FachDAO {
         }
     }
 
-    /** Read (alle) */
+    /**
+     * Liest alle Fächer aus der Datenbank und gibt sie als Liste zurück.
+     * 
+     * @return Liste aller Fächer aus der Datenbank
+     */
     public List<Fach> findAll() {
         List<Fach> ergebnis = new ArrayList<>();
         String sql = "SELECT id, kuerzel, name FROM Faecher";
@@ -68,7 +87,11 @@ public class FachDAO {
         return ergebnis;
     }
 
-    /** Update */
+    /**
+     * Ein vorhandenes Fach wird durch ein neues Objekt der Klasse Fach mit der gleichen UUID ersetzt.
+     * 
+     * @param f Das aktualisierte Fach-Objekt
+     */
     public void update(Fach f) {
         String sql = "UPDATE Faecher SET kuerzel = ?, name = ? WHERE id = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -81,7 +104,11 @@ public class FachDAO {
         }
     }
 
-    /** Delete */
+    /**
+     * Löscht das Fach mit der angegebenen ID aus der Datenbank.
+     * 
+     * @param id Die UUID des zu löschenden Fachs
+     */
     public void delete(UUID id) {
         String sql = "DELETE FROM Faecher WHERE id = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -92,7 +119,14 @@ public class FachDAO {
         }
     }
 
-    /** Mapping ResultSet -> Fach-Objekt (Zugriff auf paketprivate Felder) */
+    /**
+     * Wandelt einen Datensatz aus der Datenbank in ein Objekt der Klasse Fach um.
+     * Mapping ResultSet -> Fach-Objekt (Zugriff auf paketprivate Felder).
+     * 
+     * @param rs Das ResultSet mit den Fach-Daten
+     * @return Das erstellte Fach-Objekt
+     * @throws SQLException Falls beim Zugriff auf das ResultSet ein Fehler auftritt
+     */
     Fach mapRow(ResultSet rs) throws SQLException {
         Fach f = new Fach();
         f.id = UUID.fromString(rs.getString("id"));

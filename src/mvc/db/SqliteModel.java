@@ -1,10 +1,12 @@
-package mvc.shared;
+package mvc.db;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 import mvc.Beobachter;
 import mvc.Model;
+import mvc.shared.Aufgabe;
+import mvc.shared.Fach;
 
 /**
  * SQLite-gestützte Implementierung von {@link Model}. Persistiert Aufgaben

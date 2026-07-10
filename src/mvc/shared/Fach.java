@@ -20,4 +20,7 @@ public class Fach{
     public UUID getId() {
         return id;
     }
+    public UUID id;
+    public String kürzel;
+    public String name;
 }
