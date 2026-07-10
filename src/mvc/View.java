@@ -1,6 +1,7 @@
 package mvc;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -15,6 +16,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerDateModel;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.BorderFactory;
 import javax.swing.SwingUtilities;
 import javax.swing.BoxLayout;
 import mvc.shared.Aufgabe;
@@ -39,6 +41,7 @@ public class View extends JFrame implements Beobachter {
         fachAuswahl = new JComboBox<Fach>();
         aufgabenListe = new JPanel();
         aufgabenListe.setLayout(new BoxLayout(aufgabenListe, BoxLayout.Y_AXIS));
+        aufgabenListe.setBorder(BorderFactory.createEmptyBorder());
 
         Wert.geben().registrieren(this);
         initComponents();
@@ -82,13 +85,16 @@ public class View extends JFrame implements Beobachter {
         aufgabenListe.removeAll();
         Aufgabe[] aufgaben = Wert.geben().aufgabenZurückgeben();
         for (Aufgabe aufgabe : aufgaben) {
-            JPanel zeile = new JPanel(new FlowLayout(FlowLayout.LEFT));
+            JPanel zeile = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+            zeile.setBorder(BorderFactory.createEmptyBorder());
+            zeile.setAlignmentX(LEFT_ALIGNMENT);
             JCheckBox checkBox = new JCheckBox();
             checkBox.setSelected(aufgabe.istErledigt());
             checkBox.addActionListener(e -> controller.statusÄndernButtonGedrueckt(aufgabe.gibId()));
             zeile.add(checkBox);
             zeile.add(new JLabel(aufgabe.gibFach().gibKürzel() + ": " + aufgabe.gibTitel()));
             zeile.add(new JLabel(datumFormat.format(aufgabe.gibAblaufdatum())));
+            zeile.setMaximumSize(new Dimension(Integer.MAX_VALUE, zeile.getPreferredSize().height));
             aufgabenListe.add(zeile);
         }
         aufgabenListe.revalidate();
