@@ -11,7 +11,7 @@ import mvc.shared.Fach;
 /**
  * SQLite-gestützte Implementierung von {@link Model}. Persistiert Aufgaben
  * und Fächer über {@link AufgabeDAO} und {@link FachDAO} und benachrichtigt
- * registrierte Beobachter nach jeder Änderung, analog zu Wert.zahlErhoehen().
+ * registrierte Beobachter nach jeder Änderung.
  */
 public class SqliteModel implements Model {
 
@@ -29,7 +29,7 @@ public class SqliteModel implements Model {
     public void aufgabeHinzufügen(Aufgabe a) {
         aufgabeDAO.insert(a);
         for (Beobachter b : beobachter) {
-            b.aufgabeAnzeigen(a);
+            b.datenGeaendert();
         }
     }
 
@@ -43,9 +43,8 @@ public class SqliteModel implements Model {
     public boolean aufgabenStatusÄndern(UUID id) {
         boolean geändert = aufgabeDAO.toggleStatus(id);
         if (geändert) {
-            Aufgabe a = aufgabeDAO.findById(id);
             for (Beobachter b : beobachter) {
-                b.aufgabenStatusGeaendert(a.fach);
+                b.datenGeaendert();
             }
         }
         return geändert;
@@ -61,7 +60,7 @@ public class SqliteModel implements Model {
     public void fachHinzufügen(Fach f) {
         fachDAO.insert(f);
         for (Beobachter b : beobachter) {
-            b.fachAnzeigen(f);
+            b.datenGeaendert();
         }
     }
 

@@ -16,13 +16,11 @@ public class Wert implements Model{
     //ToDo: Implementiere das Model als Singleton
     // Attribute
     private static Wert w = new Wert();
-    private int zahl;
     private LinkedList<Beobachter> beobachter;
     private LinkedList<Aufgabe> aufgaben;
     private LinkedList<Fach> fächer;
     // Konstruktor
     private Wert(){
-        zahl = 0;
         beobachter = new LinkedList<Beobachter>();
         aufgaben = new LinkedList<Aufgabe>();
         fächer = new LinkedList<Fach>();
@@ -32,10 +30,9 @@ public class Wert implements Model{
         return w;
     }
     // Methoden aus Model
-    public int gibZahl(){ return zahl; }
-
     public void aufgabeHinzufügen(Aufgabe a){
         aufgaben.add(a);
+        benachrichtigen();
     }
 
     public Aufgabe[] aufgabenZurückgeben(){
@@ -43,6 +40,13 @@ public class Wert implements Model{
     }
 
     public boolean aufgabenStatusÄndern(UUID id){
+        for (Aufgabe aufgabe : aufgaben) {
+            if (aufgabe.gibId() != null && aufgabe.gibId().equals(id)) {
+                aufgabe.statusUmschalten();
+                benachrichtigen();
+                return true;
+            }
+        }
         return false;
     }
 
@@ -52,6 +56,7 @@ public class Wert implements Model{
 
     public void fachHinzufügen(Fach f){
         fächer.add(f);
+        benachrichtigen();
     }
     
     public void registrieren(Beobachter b){
@@ -59,5 +64,11 @@ public class Wert implements Model{
     
     public void abmelden(Beobachter b){
         beobachter.remove(b);  }
+
+    private void benachrichtigen() {
+        for (Beobachter b : beobachter) {
+            b.datenGeaendert();
+        }
+    }
     
 }
