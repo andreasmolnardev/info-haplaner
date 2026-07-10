@@ -49,6 +49,12 @@ public class LogikController implements Controller {
         model.aufgabenStatusÄndern(id);
     }
 
+    @Override
+    public Aufgabe[] aufgabenZurückgeben() {
+        return model.aufgabenZurückgeben();
+    }
+
+
     /**
      * Löst eine Fach-UUID über einen Lesezugriff auf die Datenbank
      * (FachDAO.findAll -> SELECT ... FROM Faecher) zu einem Fach-Objekt auf.
