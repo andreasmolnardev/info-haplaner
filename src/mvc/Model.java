@@ -13,6 +13,7 @@ public interface Model {
     void aufgabeHinzufügen(Aufgabe a);
     Aufgabe[] aufgabenZurückgeben();
     boolean aufgabenStatusÄndern(UUID id);
+    Aufgabe[] aufgabenFachZurückgeben(Fach f);
 
     Fach[] fächerZurückgeben();
     void fachHinzufügen(Fach f);
