@@ -14,11 +14,11 @@ import mvc.shared.Fach;
  *
  * @author So
  */
-public class ZaehlerController implements Controller{
+public class AufgabenController implements Controller{
     // Attribute
     private View view;
     // Konstruktor
-    public ZaehlerController(){
+    public AufgabenController(){
         view = new View(this);
         view.setVisible(true);
     }

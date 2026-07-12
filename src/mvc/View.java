@@ -125,7 +125,7 @@ public class View extends JFrame implements Beobachter {
     public static void main(String args[]) {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                new ZaehlerController();
+                new AufgabenController();
             }
         });
     }
