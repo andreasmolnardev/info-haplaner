@@ -1,5 +1,7 @@
 package mvc;
 
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.UUID;
 import mvc.shared.Aufgabe;
@@ -54,11 +56,18 @@ public class LogikController implements Controller {
         return model.aufgabenZurückgeben();
     }
 
+    @Override
+    public Aufgabe[] aufgabenNachDatumSortiertZurückgeben() {
+        Aufgabe[] aufgaben = model.aufgabenZurückgeben();
+        Aufgabe[] sortierteAufgaben = Arrays.copyOf(aufgaben, aufgaben.length);
+        Arrays.sort(sortierteAufgaben, Comparator.comparing(Aufgabe::gibAblaufdatum));
+        return sortierteAufgaben;
+    }
 
-    /**
      * Löst eine Fach-UUID über einen Lesezugriff auf die Datenbank
      * (FachDAO.findAll -> SELECT ... FROM Faecher) zu einem Fach-Objekt auf.
      */
+
     private Fach fachZuId(UUID id) {
         for (Fach f : model.fächerZurückgeben()) {
             if (id.equals(f.getId())) {
