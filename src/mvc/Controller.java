@@ -17,4 +17,5 @@ public interface Controller {
     void statusÄndernButtonGedrueckt(UUID aufgabe);
     
     Aufgabe[] aufgabenZurückgeben();
+    Aufgabe[] aufgabenNachDatumSortiertZurückgeben();
 }

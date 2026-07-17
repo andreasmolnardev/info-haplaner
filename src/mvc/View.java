@@ -65,7 +65,7 @@ public class View extends JFrame implements Beobachter {
         JPanel form = new JPanel(new FlowLayout(FlowLayout.LEFT));
         form.add(new JLabel("Titel"));
         form.add(titelFeld);
-        form.add(new JLabel("Datum"));
+        form.add(new JLabel("Datum fällig"));
         form.add(datumPicker);
         form.add(new JLabel("Fach"));
         form.add(fachAuswahl);

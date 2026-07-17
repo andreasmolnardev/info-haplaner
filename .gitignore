@@ -1,0 +1,5 @@
+build/
+dist/
+*.db
+nbproject/private/
+.codegraph/
