@@ -8,6 +8,7 @@ package mvc;
 import java.util.UUID;
 
 import java.util.Date;
+import mvc.shared.Aufgabe;
 
 public interface Controller {
     void fachHinzufügen(String name, String kürzel);

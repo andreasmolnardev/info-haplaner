@@ -4,12 +4,12 @@ import java.util.Date;
 import java.util.UUID;
 
 public class Aufgabe{
-    UUID id;
-    Fach fach;
-    Date erstelldatum;
-    Date ablaufdatum;
-    String titel;
-    boolean status;
+    public UUID id;
+    public Fach fach;
+    public Date erstelldatum;
+    public Date ablaufdatum;
+    public String titel;
+    public boolean status;
 
     public Aufgabe() {
     }
