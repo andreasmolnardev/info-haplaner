@@ -8,13 +8,16 @@ package mvc;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -27,9 +30,6 @@ import mvc.shared.Fach;
 
 public class View extends JFrame implements Beobachter {
     private final Controller controller;
-    private final javax.swing.JTextField titelFeld;
-    private final JSpinner datumPicker;
-    private final JComboBox<Fach> fachAuswahl;
     private final JComboBox<String> sortAuswahl;
     private final JPanel aufgabenListe;
     private final SimpleDateFormat datumFormat;
@@ -39,10 +39,6 @@ public class View extends JFrame implements Beobachter {
         datumFormat = new SimpleDateFormat("d.M.yy");
         datumFormat.setLenient(false);
 
-        titelFeld = new javax.swing.JTextField(24);
-        datumPicker = new JSpinner(new SpinnerDateModel(new Date(), null, null, java.util.Calendar.DAY_OF_MONTH));
-        datumPicker.setEditor(new JSpinner.DateEditor(datumPicker, "dd.MM.yy"));
-        fachAuswahl = new JComboBox<Fach>();
         sortAuswahl = new JComboBox<String>(new String[]{"Datum", "Name"});
         sortAuswahl.addActionListener(e -> zeichneAufgaben());
         aufgabenListe = new JPanel();
@@ -56,7 +52,6 @@ public class View extends JFrame implements Beobachter {
 
     @Override
     public void datenGeaendert() {
-        fachAuswahl.setModel(new DefaultComboBoxModel<Fach>(Wert.geben().fächerZurückgeben()));
         zeichneAufgaben();
     }
 
@@ -66,15 +61,8 @@ public class View extends JFrame implements Beobachter {
         setLayout(new BorderLayout(12, 12));
 
         JPanel form = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        form.add(new JLabel("Titel"));
-        form.add(titelFeld);
-        form.add(new JLabel("Datum fällig"));
-        form.add(datumPicker);
-        form.add(new JLabel("Fach"));
-        form.add(fachAuswahl);
-
         javax.swing.JButton aufgabeKnopf = new javax.swing.JButton("Aufgabe hinzufügen");
-        aufgabeKnopf.addActionListener(e -> aufgabeHinzufuegen());
+        aufgabeKnopf.addActionListener(e -> aufgabeDialogOeffnen());
         form.add(aufgabeKnopf);
 
         javax.swing.JButton fachKnopf = new javax.swing.JButton("Fach hinzufügen");
@@ -116,14 +104,66 @@ public class View extends JFrame implements Beobachter {
         aufgabenListe.repaint();
     }
 
-    private void aufgabeHinzufuegen() {
-        Fach fach = (Fach) fachAuswahl.getSelectedItem();
-        if (fach == null) {
-            return;
-        }
-        Date datum = (Date) datumPicker.getValue();
-        controller.aufgabeHinzufügen(fach.gibId(), titelFeld.getText(), datum);
-        titelFeld.setText("");
+    private void aufgabeDialogOeffnen() {
+        JDialog dialog = new JDialog(this, "Aufgabe hinzufügen", true);
+        dialog.setLayout(new GridBagLayout());
+
+        javax.swing.JTextField titelFeld = new javax.swing.JTextField(24);
+        JSpinner datumPicker = new JSpinner(new SpinnerDateModel(new Date(), null, null, java.util.Calendar.DAY_OF_MONTH));
+        datumPicker.setEditor(new JSpinner.DateEditor(datumPicker, "dd.MM.yy"));
+        JComboBox<Fach> fachAuswahl = new JComboBox<Fach>(Wert.geben().fächerZurückgeben());
+
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.insets = new Insets(6, 6, 6, 6);
+        constraints.anchor = GridBagConstraints.WEST;
+
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        dialog.add(new JLabel("Titel"), constraints);
+        constraints.gridx = 1;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        dialog.add(titelFeld, constraints);
+
+        constraints.gridx = 0;
+        constraints.gridy = 1;
+        constraints.fill = GridBagConstraints.NONE;
+        dialog.add(new JLabel("Fach"), constraints);
+        constraints.gridx = 1;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        dialog.add(fachAuswahl, constraints);
+
+        constraints.gridx = 0;
+        constraints.gridy = 2;
+        constraints.fill = GridBagConstraints.NONE;
+        dialog.add(new JLabel("Datum fällig"), constraints);
+        constraints.gridx = 1;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        dialog.add(datumPicker, constraints);
+
+        JPanel buttons = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
+        javax.swing.JButton abbrechenKnopf = new javax.swing.JButton("Abbrechen");
+        abbrechenKnopf.addActionListener(e -> dialog.dispose());
+        javax.swing.JButton hinzufuegenKnopf = new javax.swing.JButton("Hinzufügen");
+        hinzufuegenKnopf.addActionListener(e -> {
+            Fach fach = (Fach) fachAuswahl.getSelectedItem();
+            if (fach != null && titelFeld.getText().trim().length() > 0) {
+                controller.aufgabeHinzufügen(fach.gibId(), titelFeld.getText(), (Date) datumPicker.getValue());
+                dialog.dispose();
+            }
+        });
+        buttons.add(abbrechenKnopf);
+        buttons.add(hinzufuegenKnopf);
+
+        constraints.gridx = 0;
+        constraints.gridy = 3;
+        constraints.gridwidth = 2;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        dialog.add(buttons, constraints);
+
+        dialog.getRootPane().setDefaultButton(hinzufuegenKnopf);
+        dialog.pack();
+        dialog.setLocationRelativeTo(this);
+        dialog.setVisible(true);
     }
 
     private void fachHinzufuegen() {
