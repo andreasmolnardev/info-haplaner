@@ -5,6 +5,8 @@
  */
 package mvc;
 
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.UUID;
 import mvc.shared.Aufgabe;
@@ -61,13 +63,24 @@ public class AufgabenController implements Controller{
     }
 
     @Override
-    public void umschaltButtonGedrueckt(){
-        // UI no longer toggles counter view.
+    public Aufgabe[] aufgabenZurückgeben() {
+        return Wert.geben().aufgabenZurückgeben();
     }
 
     @Override
-    public Aufgabe[] aufgabenZurückgeben() {
-        return Wert.geben().aufgabenZurückgeben();
+    public Aufgabe[] aufgabenNachDatumSortiertZurückgeben() {
+        Aufgabe[] aufgaben = Wert.geben().aufgabenZurückgeben();
+        Aufgabe[] sortierteAufgaben = Arrays.copyOf(aufgaben, aufgaben.length);
+        Arrays.sort(sortierteAufgaben, Comparator.comparing(Aufgabe::gibAblaufdatum));
+        return sortierteAufgaben;
+    }
+
+    @Override
+    public Aufgabe[] aufgabenNachNameSortiertZurückgeben() {
+        Aufgabe[] aufgaben = Wert.geben().aufgabenZurückgeben();
+        Aufgabe[] sortierteAufgaben = Arrays.copyOf(aufgaben, aufgaben.length);
+        Arrays.sort(sortierteAufgaben, Comparator.comparing(Aufgabe::gibTitel));
+        return sortierteAufgaben;
     }
 
     public void aufgabeHinzufügen(Aufgabe a){
