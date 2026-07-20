@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package mvc;
 
 import java.util.Arrays;
@@ -11,11 +7,9 @@ import java.util.Date;
 import java.util.UUID;
 import mvc.shared.Aufgabe;
 import mvc.shared.Fach;
+import mvc.db.SqliteModel;
 
-/**
- *
- * @author So
- */
+
 public class AufgabenController implements Controller{
     // Attribute
     private View view;
@@ -58,11 +52,6 @@ public class AufgabenController implements Controller{
     }
 
     @Override
-    public void plusButtonGedrueckt(){
-        // UI uses direct form actions.
-    }
-
-    @Override
     public Aufgabe[] aufgabenZurückgeben() {
         return Wert.geben().aufgabenZurückgeben();
     }
@@ -83,8 +72,25 @@ public class AufgabenController implements Controller{
         return sortierteAufgaben;
     }
 
+    
+    /**
+     * Löst eine Fach-UUID über einen Lesezugriff auf die Datenbank
+     * (FachDAO.findAll -> SELECT ... FROM Faecher) zu einem Fach-Objekt auf.
+     */
+
+
+
     public void aufgabeHinzufügen(Aufgabe a){
         Wert.geben().aufgabeHinzufügen(a);
+    }
+
+    private Fach fachZuId(UUID id) {
+        for (Fach f : model.fächerZurückgeben()) {
+            if (id.equals(f.getId())) {
+                return f;
+            }
+        }
+        return null;
     }
 
 }
