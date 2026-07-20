@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package mvc;
 
 import java.util.Arrays;
@@ -12,10 +8,7 @@ import java.util.UUID;
 import mvc.shared.Aufgabe;
 import mvc.shared.Fach;
 
-/**
- *
- * @author So
- */
+
 public class AufgabenController implements Controller{
     // Attribute
     private View view;
@@ -55,11 +48,6 @@ public class AufgabenController implements Controller{
     @Override
     public void statusÄndernButtonGedrueckt(UUID aufgabe){
         Wert.geben().aufgabenStatusÄndern(aufgabe);
-    }
-
-    @Override
-    public void plusButtonGedrueckt(){
-        // UI uses direct form actions.
     }
 
     @Override
