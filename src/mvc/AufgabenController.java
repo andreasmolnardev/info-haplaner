@@ -7,7 +7,6 @@ import java.util.Date;
 import java.util.UUID;
 import mvc.shared.Aufgabe;
 import mvc.shared.Fach;
-import mvc.db.SqliteModel;
 
 
 public class AufgabenController implements Controller{
@@ -72,25 +71,8 @@ public class AufgabenController implements Controller{
         return sortierteAufgaben;
     }
 
-    
-    /**
-     * Löst eine Fach-UUID über einen Lesezugriff auf die Datenbank
-     * (FachDAO.findAll -> SELECT ... FROM Faecher) zu einem Fach-Objekt auf.
-     */
-
-
-
     public void aufgabeHinzufügen(Aufgabe a){
         Wert.geben().aufgabeHinzufügen(a);
-    }
-
-    private Fach fachZuId(UUID id) {
-        for (Fach f : model.fächerZurückgeben()) {
-            if (id.equals(f.getId())) {
-                return f;
-            }
-        }
-        return null;
     }
 
 }
