@@ -30,6 +30,7 @@ public class View extends JFrame implements Beobachter {
     private final javax.swing.JTextField titelFeld;
     private final JSpinner datumPicker;
     private final JComboBox<Fach> fachAuswahl;
+    private final JComboBox<String> sortAuswahl;
     private final JPanel aufgabenListe;
     private final SimpleDateFormat datumFormat;
 
@@ -42,6 +43,8 @@ public class View extends JFrame implements Beobachter {
         datumPicker = new JSpinner(new SpinnerDateModel(new Date(), null, null, java.util.Calendar.DAY_OF_MONTH));
         datumPicker.setEditor(new JSpinner.DateEditor(datumPicker, "dd.MM.yy"));
         fachAuswahl = new JComboBox<Fach>();
+        sortAuswahl = new JComboBox<String>(new String[]{"Datum", "Name"});
+        sortAuswahl.addActionListener(e -> zeichneAufgaben());
         aufgabenListe = new JPanel();
         aufgabenListe.setLayout(new BoxLayout(aufgabenListe, BoxLayout.Y_AXIS));
         aufgabenListe.setBorder(BorderFactory.createEmptyBorder());
@@ -78,6 +81,9 @@ public class View extends JFrame implements Beobachter {
         fachKnopf.addActionListener(e -> fachHinzufuegen());
         form.add(fachKnopf);
 
+        form.add(new JLabel("Sortieren"));
+        form.add(sortAuswahl);
+
         add(form, BorderLayout.NORTH);
         add(new JScrollPane(aufgabenListe), BorderLayout.CENTER);
 
@@ -87,7 +93,12 @@ public class View extends JFrame implements Beobachter {
 
     private void zeichneAufgaben() {
         aufgabenListe.removeAll();
-        Aufgabe[] aufgaben = Wert.geben().aufgabenZurückgeben();
+        Aufgabe[] aufgaben;
+        if ("Name".equals(sortAuswahl.getSelectedItem())) {
+            aufgaben = controller.aufgabenNachNameSortiertZurückgeben();
+        } else {
+            aufgaben = controller.aufgabenNachDatumSortiertZurückgeben();
+        }
         for (Aufgabe aufgabe : aufgaben) {
             JPanel zeile = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
             zeile.setBorder(BorderFactory.createEmptyBorder());

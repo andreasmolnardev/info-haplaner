@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.UUID;
 import mvc.shared.Aufgabe;
 import mvc.shared.Fach;
-import mvc.shared.SqliteModel;
+import mvc.db.SqliteModel;
 
 /**
  * Controller, der die Benutzeraktionen auf das persistente {@link SqliteModel}
@@ -64,6 +64,15 @@ public class LogikController implements Controller {
         return sortierteAufgaben;
     }
 
+    @Override
+    public Aufgabe[] aufgabenNachNameSortiertZurückgeben() {
+        Aufgabe[] aufgaben = model.aufgabenZurückgeben();
+        Aufgabe[] sortierteAufgaben = Arrays.copyOf(aufgaben, aufgaben.length);
+        Arrays.sort(sortierteAufgaben, Comparator.comparing(Aufgabe::gibTitel));
+        return sortierteAufgaben;
+    }
+
+    /**
      * Löst eine Fach-UUID über einen Lesezugriff auf die Datenbank
      * (FachDAO.findAll -> SELECT ... FROM Faecher) zu einem Fach-Objekt auf.
      */
