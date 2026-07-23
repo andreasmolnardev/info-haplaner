@@ -33,11 +33,13 @@ public class View extends JFrame implements Beobachter {
     private final JComboBox<String> sortAuswahl;
     private final JPanel aufgabenListe;
     private final SimpleDateFormat datumFormat;
+    private Date gefiltertesDatum;
 
     public View(Controller c) {
         controller = c;
         datumFormat = new SimpleDateFormat("d.M.yy");
         datumFormat.setLenient(false);
+        gefiltertesDatum = null;
 
         sortAuswahl = new JComboBox<String>(new String[]{"Datum", "Name"});
         sortAuswahl.addActionListener(e -> zeichneAufgaben());
@@ -72,6 +74,10 @@ public class View extends JFrame implements Beobachter {
         form.add(new JLabel("Sortieren"));
         form.add(sortAuswahl);
 
+        javax.swing.JButton filterKnopf = new javax.swing.JButton("Nach Datum filtern");
+        filterKnopf.addActionListener(e -> datumFilterDialogOeffnen());
+        form.add(filterKnopf);
+
         add(form, BorderLayout.NORTH);
         add(new JScrollPane(aufgabenListe), BorderLayout.CENTER);
 
@@ -82,7 +88,9 @@ public class View extends JFrame implements Beobachter {
     private void zeichneAufgaben() {
         aufgabenListe.removeAll();
         Aufgabe[] aufgaben;
-        if ("Name".equals(sortAuswahl.getSelectedItem())) {
+        if (gefiltertesDatum != null) {
+            aufgaben = controller.aufgabenNachFälligkeitsdatumZurückgeben(gefiltertesDatum);
+        } else if ("Name".equals(sortAuswahl.getSelectedItem())) {
             aufgaben = controller.aufgabenNachNameSortiertZurückgeben();
         } else {
             aufgaben = controller.aufgabenNachDatumSortiertZurückgeben();
@@ -102,6 +110,54 @@ public class View extends JFrame implements Beobachter {
         }
         aufgabenListe.revalidate();
         aufgabenListe.repaint();
+    }
+
+    private void datumFilterDialogOeffnen() {
+        JDialog dialog = new JDialog(this, "Nach Datum filtern", true);
+        dialog.setLayout(new GridBagLayout());
+
+        JSpinner datumPicker = new JSpinner(new SpinnerDateModel(
+                gefiltertesDatum == null ? new Date() : gefiltertesDatum,
+                null, null, java.util.Calendar.DAY_OF_MONTH));
+        datumPicker.setEditor(new JSpinner.DateEditor(datumPicker, "dd.MM.yy"));
+
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.insets = new Insets(6, 6, 6, 6);
+        constraints.anchor = GridBagConstraints.WEST;
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        dialog.add(new JLabel("Fällig am"), constraints);
+        constraints.gridx = 1;
+        dialog.add(datumPicker, constraints);
+
+        JPanel buttons = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
+        javax.swing.JButton abbrechenKnopf = new javax.swing.JButton("Abbrechen");
+        abbrechenKnopf.addActionListener(e -> dialog.dispose());
+        javax.swing.JButton zuruecksetzenKnopf = new javax.swing.JButton("Alle anzeigen");
+        zuruecksetzenKnopf.addActionListener(e -> {
+            gefiltertesDatum = null;
+            dialog.dispose();
+            zeichneAufgaben();
+        });
+        javax.swing.JButton filternKnopf = new javax.swing.JButton("Filtern");
+        filternKnopf.addActionListener(e -> {
+            gefiltertesDatum = (Date) datumPicker.getValue();
+            dialog.dispose();
+            zeichneAufgaben();
+        });
+        buttons.add(abbrechenKnopf);
+        buttons.add(zuruecksetzenKnopf);
+        buttons.add(filternKnopf);
+        constraints.gridx = 0;
+        constraints.gridy = 1;
+        constraints.gridwidth = 2;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        dialog.add(buttons, constraints);
+
+        dialog.getRootPane().setDefaultButton(filternKnopf);
+        dialog.pack();
+        dialog.setLocationRelativeTo(this);
+        dialog.setVisible(true);
     }
 
     private void aufgabeDialogOeffnen() {
