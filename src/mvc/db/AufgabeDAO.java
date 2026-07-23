@@ -64,6 +64,30 @@ public class AufgabeDAO {
             throw new RuntimeException("Fehler beim Lesen der Aufgabe", e);
         }
     }
+    
+
+public List<Aufgabe> findByDatum(Date datum) {
+    List<Aufgabe> aufgaben = new ArrayList<>();
+
+    String sql = "SELECT id, fach_id, erstelldatum, ablaufdatum, titel, status "
+               + "FROM Hausaufgaben WHERE erstelldatum = ?";
+
+    try (PreparedStatement ps = connection.prepareStatement(sql)) {
+
+        ps.setDate(1, new java.sql.Date(datum.getTime()));
+
+        try (ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                aufgaben.add(mapRow(rs));
+            }
+        }
+
+    } catch (SQLException e) {
+        throw new RuntimeException("Fehler beim Lesen der Aufgaben", e);
+    }
+
+    return aufgaben;
+}
 
     /** Read (alle) */
     public List<Aufgabe> findAll() {
