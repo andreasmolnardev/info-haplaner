@@ -1,6 +1,5 @@
 package mvc.db;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 import mvc.Beobachter;
@@ -17,20 +16,18 @@ public class SqliteModel implements Model {
 
     private final AufgabeDAO aufgabeDAO;
     private final FachDAO fachDAO;
-    private final List<Beobachter> beobachter;
+    private Beobachter beobachter;
 
     public SqliteModel() {
         this.aufgabeDAO = new AufgabeDAO();
         this.fachDAO = new FachDAO();
-        this.beobachter = new LinkedList<>();
+        this.beobachter = null;
     }
 
     @Override
     public void aufgabeHinzufügen(Aufgabe a) {
         aufgabeDAO.insert(a);
-        for (Beobachter b : beobachter) {
-            b.datenGeaendert();
-        }
+        benachrichtigen();
     }
 
     @Override
@@ -43,9 +40,7 @@ public class SqliteModel implements Model {
     public boolean aufgabenStatusÄndern(UUID id) {
         boolean geändert = aufgabeDAO.toggleStatus(id);
         if (geändert) {
-            for (Beobachter b : beobachter) {
-                b.datenGeaendert();
-            }
+            benachrichtigen();
         }
         return geändert;
     }
@@ -59,18 +54,24 @@ public class SqliteModel implements Model {
     @Override
     public void fachHinzufügen(Fach f) {
         fachDAO.insert(f);
-        for (Beobachter b : beobachter) {
-            b.datenGeaendert();
-        }
+        benachrichtigen();
     }
 
     @Override
     public void registrieren(Beobachter b) {
-        beobachter.add(b);
+        beobachter = b;
     }
 
     @Override
     public void abmelden(Beobachter b) {
-        beobachter.remove(b);
+        if (beobachter != null && beobachter.equals(b)) {
+            beobachter = null;
+        }
+    }
+
+    private void benachrichtigen() {
+        if (beobachter != null) {
+            beobachter.datenGeaendert();
+        }
     }
 }

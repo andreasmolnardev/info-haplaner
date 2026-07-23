@@ -13,15 +13,14 @@ import mvc.shared.Fach;
  * @author So
  */
 public class Wert implements Model{
-    //ToDo: Implementiere das Model als Singleton
     // Attribute
     private static Wert w = new Wert();
-    private LinkedList<Beobachter> beobachter;
+    private Beobachter beobachter;
     private LinkedList<Aufgabe> aufgaben;
     private LinkedList<Fach> fächer;
     // Konstruktor
     private Wert(){
-        beobachter = new LinkedList<Beobachter>();
+        beobachter = null;
         aufgaben = new LinkedList<Aufgabe>();
         fächer = new LinkedList<Fach>();
     }
@@ -60,14 +59,17 @@ public class Wert implements Model{
     }
     
     public void registrieren(Beobachter b){
-        beobachter.add(b); }
+        beobachter = b; }
     
     public void abmelden(Beobachter b){
-        beobachter.remove(b);  }
+        if (beobachter != null && beobachter.equals(b)) {
+            beobachter = null;
+        }
+    }
 
     private void benachrichtigen() {
-        for (Beobachter b : beobachter) {
-            b.datenGeaendert();
+        if (beobachter != null) {
+            beobachter.datenGeaendert();
         }
     }
     

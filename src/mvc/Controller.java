@@ -19,4 +19,5 @@ public interface Controller {
     Aufgabe[] aufgabenZurückgeben();
     Aufgabe[] aufgabenNachDatumSortiertZurückgeben();
     Aufgabe[] aufgabenNachNameSortiertZurückgeben();
+    Aufgabe[] aufgabenNachFälligkeitsdatumZurückgeben(Date datum);
 }
