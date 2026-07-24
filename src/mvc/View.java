@@ -6,11 +6,14 @@
 package mvc;
 
 import java.awt.BorderLayout;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.BorderFactory;
@@ -223,10 +226,62 @@ public class View extends JFrame implements Beobachter {
     }
 
     private void fachHinzufuegen() {
-        String eingabe = javax.swing.JOptionPane.showInputDialog(this, "Fachname und Kürzel");
-        if (eingabe != null && eingabe.trim().length() > 0) {
-            controller.fachHinzufügen(eingabe.trim(), eingabe.trim());
+        JDialog dialog = new JDialog(this, "Fach hinzufügen", true);
+        dialog.setLayout(new GridBagLayout());
+
+        javax.swing.JTextField fachFeld = new javax.swing.JTextField(20);
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.insets = new Insets(6, 6, 6, 6);
+        constraints.anchor = GridBagConstraints.WEST;
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        dialog.add(new JLabel("Fachname"), constraints);
+        constraints.gridx = 1;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        dialog.add(fachFeld, constraints);
+
+        JPanel vorschlaege = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
+        String[] häufigeFächer = {"Mathe", "Deutsch", "Englisch", "Biologie", "Chemie", "Physik", "Geschichte"};
+        for (String fach : häufigeFächer) {
+            JLabel vorschlag = new JLabel(fach);
+            vorschlag.setForeground(java.awt.Color.BLUE);
+            vorschlag.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            vorschlag.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    controller.fachHinzufügen(fach, fach);
+                    dialog.dispose();
+                }
+            });
+            vorschlaege.add(vorschlag);
         }
+
+        constraints.gridx = 0;
+        constraints.gridy = 1;
+        constraints.gridwidth = 2;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        dialog.add(vorschlaege, constraints);
+
+        JPanel buttons = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
+        javax.swing.JButton abbrechenKnopf = new javax.swing.JButton("Abbrechen");
+        abbrechenKnopf.addActionListener(e -> dialog.dispose());
+        javax.swing.JButton hinzufuegenKnopf = new javax.swing.JButton("Hinzufügen");
+        hinzufuegenKnopf.addActionListener(e -> {
+            String fach = fachFeld.getText().trim();
+            if (!fach.isEmpty()) {
+                controller.fachHinzufügen(fach, fach);
+                dialog.dispose();
+            }
+        });
+        buttons.add(abbrechenKnopf);
+        buttons.add(hinzufuegenKnopf);
+        constraints.gridy = 2;
+        dialog.add(buttons, constraints);
+
+        dialog.getRootPane().setDefaultButton(hinzufuegenKnopf);
+        dialog.pack();
+        dialog.setLocationRelativeTo(this);
+        dialog.setVisible(true);
     }
 
     public static void main(String args[]) {
