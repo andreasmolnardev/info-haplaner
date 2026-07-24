@@ -1,6 +1,7 @@
 package mvc.db;
 
 import java.util.List;
+import java.util.Date;
 import java.util.UUID;
 import mvc.Beobachter;
 import mvc.Model;
@@ -33,6 +34,15 @@ public class SqliteModel implements Model {
     @Override
     public Aufgabe[] aufgabenZurückgeben() {
         List<Aufgabe> aufgaben = aufgabeDAO.findAll();
+        return aufgaben.toArray(new Aufgabe[aufgaben.size()]);
+    }
+
+    @Override
+    public Aufgabe[] aufgabenNachFälligkeitsdatumZurückgeben(Date datum) {
+        if (datum == null) {
+            return new Aufgabe[0];
+        }
+        List<Aufgabe> aufgaben = aufgabeDAO.findByDatum(datum);
         return aufgaben.toArray(new Aufgabe[aufgaben.size()]);
     }
 

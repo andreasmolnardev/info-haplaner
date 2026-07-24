@@ -6,12 +6,14 @@
 package mvc;
 
 import java.util.UUID;
+import java.util.Date;
 import mvc.shared.Aufgabe;
 import mvc.shared.Fach;
 
 public interface Model {
     void aufgabeHinzufügen(Aufgabe a);
     Aufgabe[] aufgabenZurückgeben();
+    Aufgabe[] aufgabenNachFälligkeitsdatumZurückgeben(Date datum);
     boolean aufgabenStatusÄndern(UUID id);
 
     Fach[] fächerZurückgeben();

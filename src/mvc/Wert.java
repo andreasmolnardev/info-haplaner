@@ -5,6 +5,7 @@
  */
 package mvc;
 import java.util.LinkedList;
+import java.util.Date;
 import java.util.UUID;
 import mvc.shared.Aufgabe;
 import mvc.shared.Fach;
@@ -36,6 +37,20 @@ public class Wert implements Model{
 
     public Aufgabe[] aufgabenZurückgeben(){
         return aufgaben.toArray(new Aufgabe[aufgaben.size()]);
+    }
+
+    public Aufgabe[] aufgabenNachFälligkeitsdatumZurückgeben(Date datum) {
+        if (datum == null) {
+            return new Aufgabe[0];
+        }
+        LinkedList<Aufgabe> gefilterteAufgaben = new LinkedList<Aufgabe>();
+        for (Aufgabe aufgabe : aufgaben) {
+            if (aufgabe.gibAblaufdatum() != null
+                    && aufgabe.gibAblaufdatum().equals(datum)) {
+                gefilterteAufgaben.add(aufgabe);
+            }
+        }
+        return gefilterteAufgaben.toArray(new Aufgabe[gefilterteAufgaben.size()]);
     }
 
     public boolean aufgabenStatusÄndern(UUID id){

@@ -2,12 +2,11 @@
 package mvc;
 
 import java.util.Arrays;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.UUID;
 import mvc.db.DatabaseConnection;
+import mvc.db.SqliteModel;
 import mvc.shared.Aufgabe;
 import mvc.shared.Fach;
 
@@ -15,9 +14,11 @@ import mvc.shared.Fach;
 public class AufgabenController implements Controller{
     // Attribute
     private View view;
+    private final SqliteModel sqliteModel;
     // Konstruktor
     public AufgabenController(){
         DatabaseConnection.geben();
+        sqliteModel = new SqliteModel();
         view = new View(this);
         view.setVisible(true);
     }
@@ -77,24 +78,7 @@ public class AufgabenController implements Controller{
 
     @Override
     public Aufgabe[] aufgabenNachFälligkeitsdatumZurückgeben(Date datum) {
-        ArrayList<Aufgabe> gefilterteAufgaben = new ArrayList<Aufgabe>();
-        if (datum == null) {
-            return new Aufgabe[0];
-        }
-        Calendar gesuchtesDatum = Calendar.getInstance();
-        gesuchtesDatum.setTime(datum);
-        for (Aufgabe aufgabe : Wert.geben().aufgabenZurückgeben()) {
-            if (aufgabe.gibAblaufdatum() == null) {
-                continue;
-            }
-            Calendar ablaufdatum = Calendar.getInstance();
-            ablaufdatum.setTime(aufgabe.gibAblaufdatum());
-            if (gesuchtesDatum.get(Calendar.YEAR) == ablaufdatum.get(Calendar.YEAR)
-                    && gesuchtesDatum.get(Calendar.DAY_OF_YEAR) == ablaufdatum.get(Calendar.DAY_OF_YEAR)) {
-                gefilterteAufgaben.add(aufgabe);
-            }
-        }
-        return gefilterteAufgaben.toArray(new Aufgabe[gefilterteAufgaben.size()]);
+        return sqliteModel.aufgabenNachFälligkeitsdatumZurückgeben(datum);
     }
 
     public void aufgabeHinzufügen(Aufgabe a){

@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 import mvc.shared.Aufgabe;
@@ -66,28 +67,32 @@ public class AufgabeDAO {
     }
     
 
-public List<Aufgabe> findByDatum(Date datum) {
-    List<Aufgabe> aufgaben = new ArrayList<>();
+    public List<Aufgabe> findByDatum(Date datum) {
+        List<Aufgabe> aufgaben = new ArrayList<>();
+        Calendar start = Calendar.getInstance();
+        start.setTime(datum);
+        start.set(Calendar.HOUR_OF_DAY, 0);
+        start.set(Calendar.MINUTE, 0);
+        start.set(Calendar.SECOND, 0);
+        start.set(Calendar.MILLISECOND, 0);
+        Calendar ende = (Calendar) start.clone();
+        ende.add(Calendar.DAY_OF_YEAR, 1);
 
-    String sql = "SELECT id, fach_id, erstelldatum, ablaufdatum, titel, status "
-               + "FROM Hausaufgaben WHERE erstelldatum = ?";
-
-    try (PreparedStatement ps = connection.prepareStatement(sql)) {
-
-        ps.setDate(1, new java.sql.Date(datum.getTime()));
-
-        try (ResultSet rs = ps.executeQuery()) {
-            while (rs.next()) {
-                aufgaben.add(mapRow(rs));
+        String sql = "SELECT id, fach_id, erstelldatum, ablaufdatum, titel, status "
+                + "FROM Hausaufgaben WHERE ablaufdatum >= ? AND ablaufdatum < ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setLong(1, start.getTimeInMillis());
+            ps.setLong(2, ende.getTimeInMillis());
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    aufgaben.add(mapRow(rs));
+                }
             }
+        } catch (SQLException e) {
+            throw new RuntimeException("Fehler beim Lesen der Aufgaben", e);
         }
-
-    } catch (SQLException e) {
-        throw new RuntimeException("Fehler beim Lesen der Aufgaben", e);
+        return aufgaben;
     }
-
-    return aufgaben;
-}
 
     /** Read (alle) */
     public List<Aufgabe> findAll() {
