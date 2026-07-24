@@ -104,7 +104,7 @@ public class View extends JFrame implements Beobachter {
             checkBox.addActionListener(e -> controller.statusÄndernButtonGedrueckt(aufgabe.gibId()));
             zeile.add(checkBox);
             zeile.add(new JLabel(aufgabe.gibFach().gibKürzel() + ": " + aufgabe.gibTitel()));
-            zeile.add(new JLabel(datumFormat.format(aufgabe.gibAblaufdatum())));
+            zeile.add(new JLabel(" " + datumFormat.format(aufgabe.gibAblaufdatum())));
             zeile.setMaximumSize(new Dimension(Integer.MAX_VALUE, zeile.getPreferredSize().height));
             aufgabenListe.add(zeile);
         }
