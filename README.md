@@ -18,4 +18,4 @@ ant jar
 java -jar dist/MVC_Lsg.jar
 ```
 
-Die SQLite-Datenbank (`aufgaben.db`) wird automatisch beim ersten Start im Projektverzeichnis angelegt.
+Die SQLite-Datenbank (`haplaner.db`) wird automatisch beim ersten Start im Projektverzeichnis angelegt.

@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.UUID;
-import mvc.db.DatabaseConnection;
 import mvc.db.SqliteModel;
 import mvc.shared.Aufgabe;
 import mvc.shared.Fach;
@@ -13,13 +12,13 @@ import mvc.shared.Fach;
 
 public class AufgabenController implements Controller{
     // Attribute
-    private View view;
-    private final SqliteModel sqliteModel;
+    private final View view;
+    private final Model model;
     // Konstruktor
     public AufgabenController(){
-        DatabaseConnection.geben();
-        sqliteModel = new SqliteModel();
+        model = new SqliteModel();
         view = new View(this);
+        model.registrieren(view);
         view.setVisible(true);
     }
     //Methoden aus Interface
@@ -27,7 +26,7 @@ public class AufgabenController implements Controller{
     public void fachHinzufügen(String name, String kürzel){
         if (kürzel != null && kürzel.trim().length() > 0) {
             String fachName = name == null || name.trim().length() == 0 ? kürzel.trim() : name.trim();
-            Wert.geben().fachHinzufügen(new Fach(fachName, kürzel.trim()));
+            model.fachHinzufügen(new Fach(fachName, kürzel.trim()));
         }
     }
 
@@ -38,7 +37,7 @@ public class AufgabenController implements Controller{
         }
         Aufgabe a = new Aufgabe();
         String name = titel.trim();
-        for (Fach f : Wert.geben().fächerZurückgeben()) {
+        for (Fach f : model.fächerZurückgeben()) {
             if (f.gibId() != null && f.gibId().equals(fach)) {
                 a = new Aufgabe(f, name, ablaufdatum);
                 break;
@@ -47,22 +46,22 @@ public class AufgabenController implements Controller{
         if (a.fach == null) {
             throw new IllegalArgumentException("Unbekanntes Fach: " + fach);
         }
-        Wert.geben().aufgabeHinzufügen(a);
+        model.aufgabeHinzufügen(a);
     }
 
     @Override
     public void statusÄndernButtonGedrueckt(UUID aufgabe){
-        Wert.geben().aufgabenStatusÄndern(aufgabe);
+        model.aufgabenStatusÄndern(aufgabe);
     }
 
     @Override
     public Aufgabe[] aufgabenZurückgeben() {
-        return Wert.geben().aufgabenZurückgeben();
+        return model.aufgabenZurückgeben();
     }
 
     @Override
     public Aufgabe[] aufgabenNachDatumSortiertZurückgeben() {
-        Aufgabe[] aufgaben = Wert.geben().aufgabenZurückgeben();
+        Aufgabe[] aufgaben = model.aufgabenZurückgeben();
         Aufgabe[] sortierteAufgaben = Arrays.copyOf(aufgaben, aufgaben.length);
         Arrays.sort(sortierteAufgaben, Comparator.comparing(Aufgabe::gibAblaufdatum));
         return sortierteAufgaben;
@@ -70,7 +69,7 @@ public class AufgabenController implements Controller{
 
     @Override
     public Aufgabe[] aufgabenNachNameSortiertZurückgeben() {
-        Aufgabe[] aufgaben = Wert.geben().aufgabenZurückgeben();
+        Aufgabe[] aufgaben = model.aufgabenZurückgeben();
         Aufgabe[] sortierteAufgaben = Arrays.copyOf(aufgaben, aufgaben.length);
         Arrays.sort(sortierteAufgaben, Comparator.comparing(Aufgabe::gibTitel));
         return sortierteAufgaben;
@@ -78,11 +77,12 @@ public class AufgabenController implements Controller{
 
     @Override
     public Aufgabe[] aufgabenNachFälligkeitsdatumZurückgeben(Date datum) {
-        return sqliteModel.aufgabenNachFälligkeitsdatumZurückgeben(datum);
+        return model.aufgabenNachFälligkeitsdatumZurückgeben(datum);
     }
 
-    public void aufgabeHinzufügen(Aufgabe a){
-        Wert.geben().aufgabeHinzufügen(a);
+    @Override
+    public Fach[] fächerZurückgeben() {
+        return model.fächerZurückgeben();
     }
 
 }

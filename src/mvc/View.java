@@ -50,7 +50,6 @@ public class View extends JFrame implements Beobachter {
         aufgabenListe.setLayout(new BoxLayout(aufgabenListe, BoxLayout.Y_AXIS));
         aufgabenListe.setBorder(BorderFactory.createEmptyBorder());
 
-        Wert.geben().registrieren(this);
         initComponents();
         datenGeaendert();
     }
@@ -170,7 +169,7 @@ public class View extends JFrame implements Beobachter {
         javax.swing.JTextField titelFeld = new javax.swing.JTextField(24);
         JSpinner datumPicker = new JSpinner(new SpinnerDateModel(new Date(), null, null, java.util.Calendar.DAY_OF_MONTH));
         datumPicker.setEditor(new JSpinner.DateEditor(datumPicker, "dd.MM.yy"));
-        JComboBox<Fach> fachAuswahl = new JComboBox<Fach>(Wert.geben().fächerZurückgeben());
+        JComboBox<Fach> fachAuswahl = new JComboBox<Fach>(controller.fächerZurückgeben());
 
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.insets = new Insets(6, 6, 6, 6);

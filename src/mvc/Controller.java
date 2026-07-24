@@ -9,6 +9,7 @@ import java.util.UUID;
 
 import java.util.Date;
 import mvc.shared.Aufgabe;
+import mvc.shared.Fach;
 
 public interface Controller {
     void fachHinzufügen(String name, String kürzel);
@@ -20,4 +21,5 @@ public interface Controller {
     Aufgabe[] aufgabenNachDatumSortiertZurückgeben();
     Aufgabe[] aufgabenNachNameSortiertZurückgeben();
     Aufgabe[] aufgabenNachFälligkeitsdatumZurückgeben(Date datum);
+    Fach[] fächerZurückgeben();
 }
