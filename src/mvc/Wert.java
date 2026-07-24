@@ -5,6 +5,7 @@
  */
 package mvc;
 import java.util.LinkedList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 import mvc.shared.Aufgabe;
@@ -44,13 +45,22 @@ public class Wert implements Model{
             return new Aufgabe[0];
         }
         LinkedList<Aufgabe> gefilterteAufgaben = new LinkedList<Aufgabe>();
+        Calendar gewünschtesDatum = Calendar.getInstance();
+        gewünschtesDatum.setTime(datum);
         for (Aufgabe aufgabe : aufgaben) {
-            if (aufgabe.gibAblaufdatum() != null
-                    && aufgabe.gibAblaufdatum().equals(datum)) {
+            if (aufgabe.gibAblaufdatum() != null && gleichesKalenderdatum(
+                    aufgabe.gibAblaufdatum(), gewünschtesDatum)) {
                 gefilterteAufgaben.add(aufgabe);
             }
         }
         return gefilterteAufgaben.toArray(new Aufgabe[gefilterteAufgaben.size()]);
+    }
+
+    private boolean gleichesKalenderdatum(Date datum, Calendar vergleichsdatum) {
+        Calendar kalender = Calendar.getInstance();
+        kalender.setTime(datum);
+        return kalender.get(Calendar.YEAR) == vergleichsdatum.get(Calendar.YEAR)
+                && kalender.get(Calendar.DAY_OF_YEAR) == vergleichsdatum.get(Calendar.DAY_OF_YEAR);
     }
 
     public boolean aufgabenStatusÄndern(UUID id){

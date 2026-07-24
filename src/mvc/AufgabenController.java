@@ -27,7 +27,7 @@ public class AufgabenController implements Controller{
     public void fachHinzufügen(String name, String kürzel){
         if (kürzel != null && kürzel.trim().length() > 0) {
             String fachName = name == null || name.trim().length() == 0 ? kürzel.trim() : name.trim();
-            Wert.geben().fachHinzufügen(new Fach(fachName, kürzel.trim()));
+            sqliteModel.fachHinzufügen(new Fach(fachName, kürzel.trim()));
         }
     }
 
@@ -38,7 +38,7 @@ public class AufgabenController implements Controller{
         }
         Aufgabe a = new Aufgabe();
         String name = titel.trim();
-        for (Fach f : Wert.geben().fächerZurückgeben()) {
+        for (Fach f : sqliteModel.fächerZurückgeben()) {
             if (f.gibId() != null && f.gibId().equals(fach)) {
                 a = new Aufgabe(f, name, ablaufdatum);
                 break;
@@ -47,22 +47,22 @@ public class AufgabenController implements Controller{
         if (a.fach == null) {
             throw new IllegalArgumentException("Unbekanntes Fach: " + fach);
         }
-        Wert.geben().aufgabeHinzufügen(a);
+        sqliteModel.aufgabeHinzufügen(a);
     }
 
     @Override
     public void statusÄndernButtonGedrueckt(UUID aufgabe){
-        Wert.geben().aufgabenStatusÄndern(aufgabe);
+        sqliteModel.aufgabenStatusÄndern(aufgabe);
     }
 
     @Override
     public Aufgabe[] aufgabenZurückgeben() {
-        return Wert.geben().aufgabenZurückgeben();
+        return sqliteModel.aufgabenZurückgeben();
     }
 
     @Override
     public Aufgabe[] aufgabenNachDatumSortiertZurückgeben() {
-        Aufgabe[] aufgaben = Wert.geben().aufgabenZurückgeben();
+        Aufgabe[] aufgaben = sqliteModel.aufgabenZurückgeben();
         Aufgabe[] sortierteAufgaben = Arrays.copyOf(aufgaben, aufgaben.length);
         Arrays.sort(sortierteAufgaben, Comparator.comparing(Aufgabe::gibAblaufdatum));
         return sortierteAufgaben;
@@ -70,7 +70,7 @@ public class AufgabenController implements Controller{
 
     @Override
     public Aufgabe[] aufgabenNachNameSortiertZurückgeben() {
-        Aufgabe[] aufgaben = Wert.geben().aufgabenZurückgeben();
+        Aufgabe[] aufgaben = sqliteModel.aufgabenZurückgeben();
         Aufgabe[] sortierteAufgaben = Arrays.copyOf(aufgaben, aufgaben.length);
         Arrays.sort(sortierteAufgaben, Comparator.comparing(Aufgabe::gibTitel));
         return sortierteAufgaben;
@@ -82,7 +82,7 @@ public class AufgabenController implements Controller{
     }
 
     public void aufgabeHinzufügen(Aufgabe a){
-        Wert.geben().aufgabeHinzufügen(a);
+        sqliteModel.aufgabeHinzufügen(a);
     }
 
 }
